@@ -54,3 +54,5 @@ dkms.conf
 # CMake
 .cache
 build
+bin
+obj
