@@ -1,5 +1,5 @@
 #define COLS 16
-#define ROWS 24
+#define ROWS 20
 
 #include <stdio.h>
 
@@ -13,10 +13,10 @@ void main(void) {
    int i;
    unsigned int x1,x2,y1,y2;
 
-    x1 = 27;
-    x2 = 45;
+    x1 = 0;
+    x2 = 80;
     y1 = 5;
-    y2 = 14;
+    y2 = 35;
 
    printf("\n\n\n\nFile to open__: ");
    scanf("%s", &filename);     // poderia usar o gets(filename);
@@ -25,9 +25,9 @@ void main(void) {
       printf("Não foi possivel abrir o arquivo %s", filename);
    }else{
 
-    /*window(x1,y1,x2,y2,"Teste");
+    window(x1,y1,x2,y2,"EDITOR HEXADECIMAL");
     drawbox(x1,y1,x2,y2);
-    textcenter(x1,x2,6,"Teste");*/
+    textcenter(x1,x2,6,"EDITOR HEXADECIMAL");
 
       for(l = 0; l < ROWS; l ++) {
          for(c = 0; c < COLS; c++) {
@@ -45,7 +45,7 @@ void main(void) {
             c = 0;                // suporta arquivos até 80 X 24 bytes ...
             l ++;
             if(l >= ROWS) {
-               printf("\nPrograma somente suporta poucos dados, eh bem burrinho");
+               printf("\nExcesso de informacoes, programa nao suporta muitos dados");
                break;
             }
          }
@@ -53,7 +53,7 @@ void main(void) {
 
       fclose(handle);
 
-      for(aux = 0; aux < 24; aux ++) {
+      for(aux = 0; aux < 1; aux ++) {
          printf("\n\n"); // limpar a tela com linhas em branco
       }
 
