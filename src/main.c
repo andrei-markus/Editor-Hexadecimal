@@ -10,6 +10,13 @@ void main(void) {
    unsigned char aux;                // variavel auxiliar para leitura dos dados
    unsigned char l =  0;             // 1 byte de 0 a 255
    unsigned char c =  0;             // 1 byte de 0 a 255
+   int i;
+   unsigned int x1,x2,y1,y2;
+
+    x1 = 27;
+    x2 = 45;
+    y1 = 5;
+    y2 = 14;
 
    printf("\n\n\n\nFile to open__: ");
    scanf("%s", &filename);     // poderia usar o gets(filename);
@@ -17,6 +24,10 @@ void main(void) {
    if((handle = fopen(filename, "r")) == NULL) { // conseguiu abrir ?
       printf("Não foi possivel abrir o arquivo %s", filename);
    }else{
+
+    /*window(x1,y1,x2,y2,"Teste");
+    drawbox(x1,y1,x2,y2);
+    textcenter(x1,x2,6,"Teste");*/
 
       for(l = 0; l < ROWS; l ++) {
          for(c = 0; c < COLS; c++) {
@@ -36,8 +47,8 @@ void main(void) {
             if(l >= ROWS) {
                printf("\nPrograma somente suporta poucos dados, eh bem burrinho");
                break;
-         }
             }
+         }
       } while(aux != EOF); // End Of File
 
       fclose(handle);
@@ -65,4 +76,3 @@ void main(void) {
 
    }
 }
-
