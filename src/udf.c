@@ -1,11 +1,13 @@
 /** ==========================================
- Author______: Alexandre Stürmer Wolf
+ Author______: Alexandre Stï¿½rmer Wolf
  Date________: 03/20/2024
  Utility_____: Many things
  Compiler cmd: gcc udf.c -o udf
  ========================================= **/
-
+ 
+#include "udf.h"
 #include <windows.h>
+#include <stdio.h>
 #define clrscr() system("cls")
 #define MAX_SIZE 20
 
@@ -37,7 +39,7 @@ void drawbox(int x1, int y1, int x2, int y2)
     printf("%c", 217);
 }
 
-void fillbox(x1, y1, x2, y2)
+void fillbox(int x1, int y1, int x2, int y2)
 {
     int i;
     for(i=y1+1; i<y2; i++)
@@ -120,7 +122,7 @@ void delay(int t) {
     for(i=0;i<10 * t; i++);
 }
 
-int achoice(int x, int y, int x1, int y1, int numopcoes, char opcoes[][MAX_SIZE]) {
+int achoice(int x, int y, int x1, int y1, int numopcoes, char opcoes[][20]) {
    int i;
    int opcao = 0;
    int tecla = 0;
