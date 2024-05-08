@@ -12,7 +12,6 @@ int stringlen(char text[]);
 void textcenter(int x1, int x2, int y1, char text[]);
 void window(int x1, int y1, int x2, int y2, char text[]);
 void delay(int t);
-int achoice(int x, int y, int x1, int y1, int numopcoes, char opcoes[][20]);
-
+void achoice(int x, int y, const char *filename);
 
 #endif

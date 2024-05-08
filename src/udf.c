@@ -1,13 +1,8 @@
-/** ==========================================
- Author______: Alexandre St�rmer Wolf
- Date________: 03/20/2024
- Utility_____: Many things
- Compiler cmd: gcc udf.c -o udf
- ========================================= **/
- 
 #include "udf.h"
 #include <windows.h>
 #include <stdio.h>
+#include <conio.h>
+#include <ctype.h>
 #define clrscr() system("cls")
 #define MAX_SIZE 20
 
@@ -122,34 +117,73 @@ void delay(int t) {
     for(i=0;i<10 * t; i++);
 }
 
-int achoice(int x, int y, int x1, int y1, int numopcoes, char opcoes[][20]) {
-   int i;
-   int opcao = 0;
-   int tecla = 0;
+// Função para apresentar um menu interativo e realizar operações com os dados
+void achoice(int x, int y, const char *filename) {
+    int cursor_x = x;
+    int cursor_y = y;
+    char tecla;
 
-   while(tecla != 13) {
-      textcolor(3); textbackground(4);
-      for(i = 0; i< numopcoes; i++) {
-         gotoxy(x, y + i); spaces(x1 - x);
-         gotoxy(x, y + i); printf("%s", opcoes[i]);
-      }
-      textcolor(4); textbackground(5);
-      gotoxy(x, y + opcao); spaces(x1 - x);
-      gotoxy(x, y + opcao); printf("%s", opcoes[opcao]);
-
-      tecla = getch();
-      if(tecla == 'A' || tecla == 'a') {
-        if(opcao > 0) {
-           opcao --;
+    // Exibir os dados iniciais na tela
+    for (int i = 0; i < 20; i++) {
+        for (int j = 0; j < 16; j++) {
+            gotoxy(x + j * 3, y + i);
+            printf("%02X ", getch()); // Ler e exibir os valores diretamente da tela
         }
-      }
-      if(tecla == 'Z' || tecla == 'z') {
-        if(opcao < numopcoes - 1) {
-           opcao ++;
-        }
-      }
-   }
+    }
 
-   return opcao;
+    while (1) {
+        // Posicionar o cursor na tela
+        gotoxy(cursor_x * 3, cursor_y);
+
+        // Capturar a entrada do teclado
+        tecla = getch();
+
+        // Realizar ações com base na tecla pressionada
+        switch (tecla) {
+            case 'w':
+            case 'W':
+                if (cursor_y > y)
+                    cursor_y--;
+                break;
+            case 'z':
+            case 'Z':
+                if (cursor_y < y + 20 - 1)
+                    cursor_y++;
+                break;
+            case 'a':
+            case 'A':
+                if (cursor_x > x)
+                    cursor_x--;
+                break;
+            case 'd':
+            case 'D':
+                if (cursor_x < x + 16 - 1)
+                    cursor_x++;
+                break;
+            case 's':
+            case 'S':{
+                // Salvar as alterações no arquivo
+                FILE *handle;
+                handle = fopen(filename, "w");
+                if (handle != NULL) {
+                    clrscr(); // Limpar a tela antes de exibir a mensagem de salvamento
+                    printf("Salvando dados...");
+                    fclose(handle);
+                    printf("Dados salvos com sucesso no arquivo %s!\n", filename);
+                    getch(); // Esperar uma tecla antes de continuar
+                    clrscr(); // Limpar a tela novamente
+                    return; // Sair da função
+                } else {
+                    printf("Erro ao abrir o arquivo %s para escrita!\n", filename);
+                }
+                break;
+            case 'q':
+            case 'Q':
+                // Sair da função ao pressionar 'Q'
+                return;
+            default:
+                break;
+        }
+    }
 }
-
+}
