@@ -1,0 +1,14 @@
+---
+### General config, applies to all languages ###
+BasedOnStyle: LLVM
+AllowShortEnumsOnASingleLine: false
+DerivePointerAlignment: false
+IndentCaseLabels: true
+IndentWidth: 4
+InsertNewlineAtEOF: true
+PointerAlignment: Left
+SeparateDefinitionBlocks: Always
+ShortNamespaceLines: 0
+# TODO: Find a better way to sort includes
+SortIncludes: false
+...
