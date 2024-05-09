@@ -1,10 +1,21 @@
 #include "udf.h"
+#include <corecrt_memory.h>
+#include <stdlib.h>
+#include <string.h>
 #include <windows.h>
 #include <stdio.h>
 #include <conio.h>
 #include <ctype.h>
-#define clrscr() system("cls")
-#define MAX_SIZE 20
+
+#define COLS 16
+#define ROWS 20
+#define DATA_TOP_OFFSET 2
+#define DATA_LEFT_OFFSET 11
+
+int pointer = 0;
+int max_pointer = 0;
+int first_line = 0;
+struct chunk* root;
 
 void clear() {
 #if defined(__linux__) || defined(__unix__) || defined(__APPLE__)
@@ -98,38 +109,72 @@ void textcenter(int x1, int x2, int y1, char text[]) {
 void window(int x1, int y1, int x2, int y2, char text[]) {
     int i;
 
-    color(color_white, color_dark_red);
+    color(color_white, color_dark_blue);
 
     gotoxy(x1, y1);
     spaces(x2 - x1);
     textcenter(x1, x2, y1, text);
 
-    color(color_white, color_dark_blue);
+    color(color_white, color_black);
     drawbox(x1, y1 + 1, x2, y2);
     fillbox(x1, y1 + 1, x2, y2);
     color(color_white, color_black);
 }
 
-void display_data(int cols, int rows, char* data, int line) {
+void set_data(char* data, int size) {
+    root = calloc(1, sizeof(struct chunk));
+    root->data = data;
+    root->size = size;
+    root->lenght = size;
+    max_pointer = size;
+}
+
+// retorna a quantidade de caracteres escritos no out
+int get_data_slice(struct chunk* data, int offset, int size, char* out) {
+    memset(out, 0, size);
+    if (data->size - offset >= size) {
+        memcpy(out, &(data->data[offset]), size);
+    } else {
+        memcpy(out, &(data->data[offset]), data->size - offset);
+    }
+}
+
+void show_data() {
+
     int l;
     int c;
+    char data[ROWS * COLS];
 
-    for (l = 0; l < rows; l++) {
-        gotoxy(2, l + 2);
-        printf("%6d   ", l * cols);
-        for (c = 0; c < cols; c++) {
-            printf("%2x ", data[l * cols + c]);
+    get_data_slice(root, first_line * COLS, ROWS * COLS, data);
+
+    // Desenha numero linha
+    for (l = 0; l < ROWS; l++) {
+        gotoxy(1, l + DATA_TOP_OFFSET);
+        printf("%6d   ", (first_line + l) * COLS);
+    }
+
+    for (l = 0; l < ROWS; l++) {
+        gotoxy(DATA_LEFT_OFFSET, l + DATA_TOP_OFFSET);
+        for (c = 0; c < COLS; c++) {
+            printf("%02X ", data[l * COLS + c]);
         }
         printf("   ");
-        for (c = 0; c < cols; c++) {
-            if (data[l * cols + c] < 32 || data[l * cols + c] > 126) {
+        for (c = 0; c < COLS; c++) {
+            if (data[l * COLS + c] < 32 || data[l * COLS + c] > 126) {
                 printf(".");
             } else {
-                printf("%c", data[l * cols + c]);
+                printf("%c", data[l * COLS + c]);
             }
         }
-        /*printf("\n%5d  ", (l + 1) * cols);*/
+        /*printf("\n%5d  ", (l + 1) * COLS);*/
     }
+    gotoxy(DATA_LEFT_OFFSET + (pointer % COLS) * 3,
+           DATA_TOP_OFFSET + (pointer / COLS) - first_line);
+}
+
+void show_menu(char* menu, int offset) {
+    gotoxy(2, DATA_TOP_OFFSET + ROWS + offset);
+    printf("%s", menu);
 }
 
 void delay(int t) {
@@ -173,4 +218,45 @@ int achoice(int x, int y, int x1, int y1, int numopcoes, char opcoes[][20]) {
     }
 
     return opcao;
+}
+
+int get_input() { return getch(); }
+
+void reset_pointer();
+
+void move_pointer_top() {
+    if (pointer >= COLS) {
+        pointer -= COLS;
+    }
+    move_view();
+}
+
+void move_pointer_left() {
+    if (pointer > 0) {
+        pointer--;
+    }
+    move_view();
+}
+
+void move_pointer_right() {
+    if (pointer < max_pointer) {
+        pointer++;
+    }
+    move_view();
+}
+
+void move_pointer_down() {
+    if ((pointer + COLS) <= max_pointer) {
+        pointer += COLS;
+    }
+    move_view();
+}
+
+void move_view() {
+    if ((pointer / COLS) >= (first_line + ROWS)) {
+        first_line = pointer / COLS - ROWS + 1;
+    }
+    if (pointer / COLS < first_line) {
+        first_line = pointer / COLS;
+    }
 }

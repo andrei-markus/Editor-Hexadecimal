@@ -20,6 +20,14 @@ enum colors {
     color_white = 15
 };
 
+struct chunk {
+    char* data;
+    int lenght;
+    int size;
+    struct chunck* right;
+    struct chunck* left;
+};
+
 void clear();
 void drawbox(int x1, int y1, int x2, int y2);
 void textcolor(int color);
@@ -31,8 +39,17 @@ void gotoxy(int x, int y);
 int stringlen(char text[]);
 void textcenter(int x1, int x2, int y1, char text[]);
 void window(int x1, int y1, int x2, int y2, char text[]);
-void display_data(int cols, int rows, char* data, int line);
 void delay(int t);
 int achoice(int x, int y, int x1, int y1, int numopcoes, char opcoes[][20]);
 
+int get_input();
+void set_data(char* data, int size);
+void show_data();
+void show_menu(char* menu, int offset);
+void reset_pointer();
+void move_pointer_top();
+void move_pointer_left();
+void move_pointer_right();
+void move_pointer_down();
+void move_view();
 #endif

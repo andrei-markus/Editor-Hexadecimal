@@ -4,8 +4,6 @@
 #include <string.h>
 
 #include <conio.h>
-#define COLS 16
-#define ROWS 20
 
 #define BUFFERSIZE 250
 
@@ -16,6 +14,7 @@ int main() {
     int file_size;
     char* file;
     unsigned int x1, x2, y1, y2;
+    int input = 0;
 
     x1 = 0;
     x2 = 80;
@@ -42,9 +41,33 @@ int main() {
     clear();
     // Desenha janela
     window(x1, y1, x2, y2, "EDITOR HEXADECIMAL");
+    show_menu("Q - Sair\tWASD - Move", 1);
 
-    // TODO: Logica de navegação e dição
-    display_data(COLS, ROWS, file, 0);
+    set_data(file, file_size);
+    show_data();
+    // TODO: Logica de navegação e direção
+    while (input != 'Q' && input != 'q') {
+        input = get_input();
+        switch (input) {
+            case 'w':
+            case 'W':
+                move_pointer_top();
+                break;
+            case 'a':
+            case 'A':
+                move_pointer_left();
+                break;
+            case 's':
+            case 'S':
+                move_pointer_down();
+                break;
+            case 'd':
+            case 'D':
+                move_pointer_right();
+                break;
+        }
+        show_data();
+    }
 
     free(file);
     return 0;
