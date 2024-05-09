@@ -11,28 +11,36 @@
 #define clrscr() system("cls")
 #define MAX_SIZE 20
 
+void clear() {
+#if defined(__linux__) || defined(__unix__) || defined(__APPLE__)
+    system("clear");
+#endif
+
+#if defined(_WIN32)
+    system("cls");
+#endif
+}
+
 void drawbox(int x1, int y1, int x2, int y2) {
     int i;
-    for (i = x1; i <= x2; i++) {
-        gotoxy(i, y1);
-        printf("%c", 196);
-        gotoxy(i, y2);
-        printf("%c", 196);
-    }
-    for (i = y1; i <= y2; i++) {
-        gotoxy(x1, i);
-        printf("%c", 179);
-        gotoxy(x2, i);
-        printf("%c", 179);
-    }
     gotoxy(x1, y1);
     printf("%c", 218);
-    gotoxy(x2, y1);
+    for (i = x1; i < x2 - 1; i++) {
+        printf("%c", 196);
+    }
     printf("%c", 191);
 
-    gotoxy(x1, y2);
+    for (i = y1 + 1; i <= y2; i++) {
+        gotoxy(x1, i);
+        printf("%c", 179);
+        spaces(x2 - x1 - 2);
+        printf("%c", 179);
+    }
+    gotoxy(0, y2);
     printf("%c", 192);
-    gotoxy(x2, y2);
+    for (i = x1; i < x2 - 1; i++) {
+        printf("%c", 196);
+    }
     printf("%c", 217);
 }
 
@@ -58,9 +66,9 @@ void textbackground(int color) {
     SetConsoleTextAttribute(console_color, color * 16);
 }
 
-void color(int tC, int bC) {
-    textbackground(bC);
-    textcolor(tC);
+void color(int textColor, int backgroundColor) {
+    textbackground(backgroundColor);
+    textcolor(textColor);
 }
 
 void spaces(int s) {
@@ -95,15 +103,38 @@ void textcenter(int x1, int x2, int y1, char text[]) {
 void window(int x1, int y1, int x2, int y2, char text[]) {
     int i;
 
-    color(15, 4);
+    color(color_white, color_dark_red);
 
     gotoxy(x1, y1);
     spaces(x2 - x1);
     textcenter(x1, x2, y1, text);
 
-    color(15, 1);
+    color(color_white, color_dark_blue);
     drawbox(x1, y1 + 1, x2, y2);
     fillbox(x1, y1 + 1, x2, y2);
+    color(color_white, color_black);
+}
+
+void display_data(int cols, int rows, char* data, int line) {
+    int l;
+    int c;
+
+    for (l = 0; l < rows; l++) {
+        gotoxy(2, l + 2);
+        printf("%6d   ", l * cols);
+        for (c = 0; c < cols; c++) {
+            printf("%2x ", data[l * cols + c]);
+        }
+        printf("   ");
+        for (c = 0; c < cols; c++) {
+            if (data[l * cols + c] < 32 || data[l * cols + c] > 126) {
+                printf(".");
+            } else {
+                printf("%c", data[l * cols + c]);
+            }
+        }
+        /*printf("\n%5d  ", (l + 1) * cols);*/
+    }
 }
 
 void delay(int t) {
