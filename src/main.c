@@ -88,14 +88,6 @@ int main() {
 
             printf("\n%5d  ", (l + 1) * COLS);
         }
-
-        printf("\n\nDeseja continuar? (1-Sim / 0-Não): ");
-        scanf("%d", &continuar); // lê a opção do usuário para continuar ou não
-    }
-
-    if (continuar) {
-        // Chamar a função achoice para interação do usuário
-    achoice(x1, y1, filename);
     }
 
     return 0;

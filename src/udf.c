@@ -34,7 +34,7 @@ void drawbox(int x1, int y1, int x2, int y2)
     printf("%c", 217);
 }
 
-void fillbox(int x1, int y1, int x2, int y2)
+void fillbox(x1, y1, x2, y2)
 {
     int i;
     for(i=y1+1; i<y2; i++)
@@ -117,73 +117,33 @@ void delay(int t) {
     for(i=0;i<10 * t; i++);
 }
 
-// Função para apresentar um menu interativo e realizar operações com os dados
-void achoice(int x, int y, const char *filename) {
-    int cursor_x = x;
-    int cursor_y = y;
-    char tecla;
+int achoice(int x, int y, int x1, int y1, int numopcoes, char opcoes[][MAX_SIZE]) {
+   int i;
+   int opcao = 0;
+   int tecla = 0;
 
-    // Exibir os dados iniciais na tela
-    for (int i = 0; i < 20; i++) {
-        for (int j = 0; j < 16; j++) {
-            gotoxy(x + j * 3, y + i);
-            printf("%02X ", getch()); // Ler e exibir os valores diretamente da tela
+   while(tecla != 13) {
+      textcolor(3); textbackground(4);
+      for(i = 0; i< numopcoes; i++) {
+         gotoxy(x, y + i); spaces(x1 - x);
+         gotoxy(x, y + i); printf("%s", opcoes[i]);
+      }
+      textcolor(4); textbackground(5);
+      gotoxy(x, y + opcao); spaces(x1 - x);
+      gotoxy(x, y + opcao); printf("%s", opcoes[opcao]);
+
+      tecla = getch();
+      if(tecla == 'A' || tecla == 'a') {
+        if(opcao > 0) {
+           opcao --;
         }
-    }
-
-    while (1) {
-        // Posicionar o cursor na tela
-        gotoxy(cursor_x * 3, cursor_y);
-
-        // Capturar a entrada do teclado
-        tecla = getch();
-
-        // Realizar ações com base na tecla pressionada
-        switch (tecla) {
-            case 'w':
-            case 'W':
-                if (cursor_y > y)
-                    cursor_y--;
-                break;
-            case 'z':
-            case 'Z':
-                if (cursor_y < y + 20 - 1)
-                    cursor_y++;
-                break;
-            case 'a':
-            case 'A':
-                if (cursor_x > x)
-                    cursor_x--;
-                break;
-            case 'd':
-            case 'D':
-                if (cursor_x < x + 16 - 1)
-                    cursor_x++;
-                break;
-            case 's':
-            case 'S':{
-                // Salvar as alterações no arquivo
-                FILE *handle;
-                handle = fopen(filename, "w");
-                if (handle != NULL) {
-                    clrscr(); // Limpar a tela antes de exibir a mensagem de salvamento
-                    printf("Salvando dados...");
-                    fclose(handle);
-                    printf("Dados salvos com sucesso no arquivo %s!\n", filename);
-                    getch(); // Esperar uma tecla antes de continuar
-                    clrscr(); // Limpar a tela novamente
-                    return; // Sair da função
-                } else {
-                    printf("Erro ao abrir o arquivo %s para escrita!\n", filename);
-                }
-                break;
-            case 'q':
-            case 'Q':
-                // Sair da função ao pressionar 'Q'
-                return;
-            default:
-                break;
+      }
+      if(tecla == 'Z' || tecla == 'z') {
+        if(opcao < numopcoes - 1) {
+           opcao ++;
         }
-    }
-}
+      }
+   }
+
+   return opcao;
 }
