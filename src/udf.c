@@ -1,13 +1,8 @@
-/** ==========================================
- Author______: Alexandre St�rmer Wolf
- Date________: 03/20/2024
- Utility_____: Many things
- Compiler cmd: gcc udf.c -o udf
- ========================================= **/
-
 #include "udf.h"
 #include <windows.h>
 #include <stdio.h>
+#include <conio.h>
+#include <ctype.h>
 #define clrscr() system("cls")
 #define MAX_SIZE 20
 

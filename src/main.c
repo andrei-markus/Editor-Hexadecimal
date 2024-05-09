@@ -3,8 +3,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <conio.h>
 #define COLS 16
 #define ROWS 20
+
 #define BUFFERSIZE 250
 
 int main() {
