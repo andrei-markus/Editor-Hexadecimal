@@ -7,8 +7,6 @@
 #include <conio.h>
 #include <ctype.h>
 
-#define COLS 16
-#define ROWS 20
 #define DATA_TOP_OFFSET 2
 #define DATA_LEFT_OFFSET 11
 

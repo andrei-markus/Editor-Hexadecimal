@@ -1,6 +1,9 @@
 #ifndef UDF_HEADER
 #define UDF_HEADER
 
+#define COLS 16
+#define ROWS 25
+
 enum colors {
     color_black = 0,
     color_dark_blue = 1,

@@ -17,9 +17,9 @@ int main() {
     int input = 0;
 
     x1 = 0;
-    x2 = 80;
+    x2 = COLS * 4 + 16;
     y1 = 0;
-    y2 = 25;
+    y2 = ROWS + 5;
 
     printf("File to open__: ");
     fgets(filename, BUFFERSIZE, stdin);
