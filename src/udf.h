@@ -27,8 +27,8 @@ struct chunk {
     char* data;
     int lenght;
     int size;
-    struct chunck* right;
-    struct chunck* left;
+    struct chunk* right;
+    struct chunk* left;
 };
 
 void clear();
