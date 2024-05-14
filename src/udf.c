@@ -202,7 +202,7 @@ void show_editor() {
 
     window(x1, y1, x2, y2, "EDITOR HEXADECIMAL");
     show_menu("Q - Sair\tWASD - Move\tX - Apagar", 1);
-    show_menu("F - Salvar", 2);
+    show_menu("F - Salvar\tG - Salvar como", 2);
 }
 
 void delay(int ms) {
@@ -306,17 +306,30 @@ void open_file(struct data_array* file, char* filename) {
     file->lenght = ftell(handle);
     file->capacity = file->lenght * 1.5;
     file->data = malloc(file->capacity);
-    rewind(handle);
-    fread(file->data, 1, file->lenght, handle);
+    if (file->data > 0) {
+        rewind(handle);
+        fread(file->data, 1, file->lenght, handle);
+    }
     fclose(handle);
     show_editor();
 }
 
 void save_file(const struct data_array* file, const char* filename) {
     FILE* handle;
-    if ((handle = fopen(filename, "wb")) == NULL) { // conseguiu abrir ?
+    if ((handle = fopen(filename, "wb")) == NULL) {
         printf("Não foi possivel salvar o arquivo %s", filename);
+        delay(1000);
+        return;
     }
     fwrite(file->data, 1, file->lenght, handle);
     fclose(handle);
+}
+
+void save_file_as(const struct data_array* file, char* filename) {
+    clear();
+    printf("Salvar arquivo como:");
+    fgets(filename, BUFFERSIZE, stdin);
+    filename[strcspn(filename, "\r\n")] = 0;
+    save_file(file, filename);
+    show_editor();
 }

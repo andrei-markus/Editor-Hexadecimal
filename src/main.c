@@ -48,6 +48,10 @@ int main() {
             case 'F':
                 save_file(&file, filename);
                 break;
+            case 'g':
+            case 'G':
+                save_file_as(&file, filename);
+                break;
         }
         show_data(&file, pointer, &first_line);
     }
