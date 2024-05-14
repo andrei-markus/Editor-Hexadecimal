@@ -265,3 +265,12 @@ void delete_at(struct data_array* file, int* pointer) {
     file->lenght--;
     move_pointer_left(file, pointer);
 }
+
+void save_file(const struct data_array* file, const char* filename) {
+    FILE* handle;
+    if ((handle = fopen(filename, "wb")) == NULL) { // conseguiu abrir ?
+        printf("Não foi possivel salvar o arquivo %s", filename);
+    }
+    fwrite(file->data, 1, file->lenght, handle);
+    fclose(handle);
+}

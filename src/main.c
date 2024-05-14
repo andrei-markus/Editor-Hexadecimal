@@ -39,12 +39,13 @@ int main() {
     file.data = malloc(file.capacity);
     rewind(handle);
     fread(file.data, 1, file.lenght, handle);
-    rewind(handle); // TODO: Remover e fechar arquivo
+    fclose(handle);
 
     clear();
     // Desenha janela
     window(x1, y1, x2, y2, "EDITOR HEXADECIMAL");
     show_menu("Q - Sair\tWASD - Move\tX - Apagar", 1);
+    show_menu("F - Salvar", 2);
 
     // set_data(file, file_size);
     show_data(&file, pointer, &first_line);
@@ -72,6 +73,9 @@ int main() {
             case 'X':
                 delete_at(&file, &pointer);
                 break;
+            case 'f':
+            case 'F':
+                save_file(&file, filename);
         }
         show_data(&file, pointer, &first_line);
     }

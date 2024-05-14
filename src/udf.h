@@ -54,5 +54,6 @@ void move_pointer_right(const struct data_array* file, int* pointer);
 void move_pointer_down(const struct data_array* file, int* pointer);
 
 void delete_at(struct data_array* file, int* pointer);
+void save_file(const struct data_array* file, const char* filename);
 
 #endif
