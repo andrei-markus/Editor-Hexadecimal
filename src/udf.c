@@ -2,7 +2,9 @@
 #include <corecrt_memory.h>
 #include <stdlib.h>
 #include <string.h>
-#include <windows.h>
+#if defined(WIN32)
+#include <Windows.h>
+#endif
 #include <stdio.h>
 #include <conio.h>
 #include <ctype.h>
@@ -190,6 +192,25 @@ void show_menu(char* menu, int offset) {
     printf("%s", menu);
 }
 
+void show_editor() {
+    clear();
+    unsigned int x1, x2, y1, y2;
+    x1 = 0;
+    x2 = COLS * 4 + 16;
+    y1 = 0;
+    y2 = ROWS + 5;
+
+    window(x1, y1, x2, y2, "EDITOR HEXADECIMAL");
+    show_menu("Q - Sair\tWASD - Move\tX - Apagar", 1);
+    show_menu("F - Salvar", 2);
+}
+
+void delay(int ms) {
+#if defined(WIN32)
+    Sleep(ms);
+#endif
+}
+
 int achoice(int x, int y, int x1, int y1, int numopcoes, char opcoes[][20]) {
     int i;
     int opcao = 0;
@@ -264,6 +285,31 @@ void delete_at(struct data_array* file, int* pointer) {
     }
     file->lenght--;
     move_pointer_left(file, pointer);
+}
+
+void open_file(struct data_array* file, char* filename) {
+    FILE* handle; // handle do arquivo
+
+    clear();
+    printf("Abrir arquivo:");
+    fgets(filename, BUFFERSIZE, stdin);
+    filename[strcspn(filename, "\r\n")] = 0;
+
+    if ((handle = fopen(filename, "rb")) == NULL) { // conseguiu abrir ?
+        printf("Não foi possivel abrir o arquivo %s", filename);
+        delay(1000);
+        return;
+    }
+
+    // Carregar o arquivo
+    fseek(handle, 0L, SEEK_END);
+    file->lenght = ftell(handle);
+    file->capacity = file->lenght * 1.5;
+    file->data = malloc(file->capacity);
+    rewind(handle);
+    fread(file->data, 1, file->lenght, handle);
+    fclose(handle);
+    show_editor();
 }
 
 void save_file(const struct data_array* file, const char* filename) {

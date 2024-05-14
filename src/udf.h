@@ -3,6 +3,7 @@
 
 #define COLS 16
 #define ROWS 25
+#define BUFFERSIZE 250
 
 enum colors {
     color_black = 0,
@@ -40,13 +41,13 @@ void gotoxy(int x, int y);
 int stringlen(char text[]);
 void textcenter(int x1, int x2, int y1, char text[]);
 void window(int x1, int y1, int x2, int y2, char text[]);
-void delay(int t);
+void delay(int ms);
 int achoice(int x, int y, int x1, int y1, int numopcoes, char opcoes[][20]);
 
 int get_input();
-// void set_data(char* data, int size);
 void show_data(const struct data_array* data, int pointer, int* first_line);
 void show_menu(char* menu, int offset);
+void show_editor();
 void reset_pointer();
 void move_pointer_top(const struct data_array* file, int* pointer);
 void move_pointer_left(const struct data_array* file, int* pointer);
@@ -54,6 +55,7 @@ void move_pointer_right(const struct data_array* file, int* pointer);
 void move_pointer_down(const struct data_array* file, int* pointer);
 
 void delete_at(struct data_array* file, int* pointer);
+void open_file(struct data_array* file, char* filename);
 void save_file(const struct data_array* file, const char* filename);
 
 #endif
