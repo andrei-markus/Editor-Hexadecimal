@@ -23,12 +23,10 @@ enum colors {
     color_white = 15
 };
 
-struct chunk {
+struct data_array {
     char* data;
     int lenght;
-    int size;
-    struct chunk* right;
-    struct chunk* left;
+    int capacity;
 };
 
 void clear();
@@ -46,13 +44,15 @@ void delay(int t);
 int achoice(int x, int y, int x1, int y1, int numopcoes, char opcoes[][20]);
 
 int get_input();
-void set_data(char* data, int size);
-void show_data();
+// void set_data(char* data, int size);
+void show_data(const struct data_array* data, int pointer, int* first_line);
 void show_menu(char* menu, int offset);
 void reset_pointer();
-void move_pointer_top();
-void move_pointer_left();
-void move_pointer_right();
-void move_pointer_down();
-void move_view();
+void move_pointer_top(const struct data_array* file, int* pointer);
+void move_pointer_left(const struct data_array* file, int* pointer);
+void move_pointer_right(const struct data_array* file, int* pointer);
+void move_pointer_down(const struct data_array* file, int* pointer);
+
+void delete_at(struct data_array* file, int* pointer);
+
 #endif

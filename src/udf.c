@@ -10,10 +10,10 @@
 #define DATA_TOP_OFFSET 2
 #define DATA_LEFT_OFFSET 11
 
-int pointer = 0;
 int max_pointer = 0;
 int first_line = 0;
-struct chunk* root;
+
+// struct data_array* root;
 
 void clear() {
 #if defined(__linux__) || defined(__unix__) || defined(__APPLE__)
@@ -119,36 +119,52 @@ void window(int x1, int y1, int x2, int y2, char text[]) {
     color(color_white, color_black);
 }
 
-void set_data(char* data, int size) {
-    root = calloc(1, sizeof(struct chunk));
-    root->data = data;
-    root->size = size;
-    root->lenght = size;
-    max_pointer = size;
-}
+// void set_data(char* data, int size) {
+//     root = calloc(1, sizeof(struct data_array));
+//     root->data = data;
+//     root->lenght = size;
+//     max_pointer = size;
+// }
 
 // retorna a quantidade de caracteres escritos no out
-int get_data_slice(struct chunk* data, int offset, int size, char* out) {
+void get_data_slice(const struct data_array* data, int offset, int size,
+                    char* out) {
+    int i = 0;
+
     memset(out, 0, size);
-    if (data->size - offset >= size) {
+
+    // while (i < size && (i + offset) < data->lenght) {
+
+    //     out[i] = data->data[offset + i];
+    // }
+
+    memset(out, 0, size);
+    if (data->lenght - offset >= size) {
         memcpy(out, &(data->data[offset]), size);
     } else {
-        memcpy(out, &(data->data[offset]), data->size - offset);
+        memcpy(out, &(data->data[offset]), data->lenght - offset);
     }
 }
 
-void show_data() {
+void show_data(const struct data_array* file, int pointer, int* first_line) {
 
     int l;
     int c;
+    int b;
     char data[ROWS * COLS];
 
-    get_data_slice(root, first_line * COLS, ROWS * COLS, data);
+    if ((pointer / COLS) >= (*first_line + ROWS)) {
+        *first_line = pointer / COLS - ROWS + 1;
+    }
+    if (pointer / COLS < *first_line) {
+        *first_line = pointer / COLS;
+    }
+    get_data_slice(file, *first_line * COLS, ROWS * COLS, data);
 
     // Desenha numero linha
     for (l = 0; l < ROWS; l++) {
         gotoxy(1, l + DATA_TOP_OFFSET);
-        printf("%6d   ", (first_line + l) * COLS);
+        printf("%6d   ", (*first_line + l) * COLS);
     }
 
     for (l = 0; l < ROWS; l++) {
@@ -164,21 +180,14 @@ void show_data() {
                 printf("%c", data[l * COLS + c]);
             }
         }
-        /*printf("\n%5d  ", (l + 1) * COLS);*/
     }
     gotoxy(DATA_LEFT_OFFSET + (pointer % COLS) * 3,
-           DATA_TOP_OFFSET + (pointer / COLS) - first_line);
+           DATA_TOP_OFFSET + (pointer / COLS) - *first_line);
 }
 
 void show_menu(char* menu, int offset) {
     gotoxy(2, DATA_TOP_OFFSET + ROWS + offset);
     printf("%s", menu);
-}
-
-void delay(int t) {
-    int i;
-    for (i = 0; i < 10 * t; i++)
-        ;
 }
 
 int achoice(int x, int y, int x1, int y1, int numopcoes, char opcoes[][20]) {
@@ -220,41 +229,39 @@ int achoice(int x, int y, int x1, int y1, int numopcoes, char opcoes[][20]) {
 
 int get_input() { return getch(); }
 
-void reset_pointer();
-
-void move_pointer_top() {
-    if (pointer >= COLS) {
-        pointer -= COLS;
+void move_pointer_top(const struct data_array* file, int* pointer) {
+    if (*pointer >= COLS) {
+        (*pointer) -= COLS;
     }
-    move_view();
 }
 
-void move_pointer_left() {
-    if (pointer > 0) {
-        pointer--;
+void move_pointer_left(const struct data_array* file, int* pointer) {
+    if (*pointer > 0) {
+        (*pointer)--;
     }
-    move_view();
 }
 
-void move_pointer_right() {
-    if (pointer < max_pointer) {
-        pointer++;
+void move_pointer_right(const struct data_array* file, int* pointer) {
+    if (*pointer < file->lenght) {
+        (*pointer)++;
     }
-    move_view();
 }
 
-void move_pointer_down() {
-    if ((pointer + COLS) <= max_pointer) {
-        pointer += COLS;
+void move_pointer_down(const struct data_array* file, int* pointer) {
+    if ((*pointer + COLS) <= file->lenght) {
+        (*pointer) += COLS;
     }
-    move_view();
 }
 
-void move_view() {
-    if ((pointer / COLS) >= (first_line + ROWS)) {
-        first_line = pointer / COLS - ROWS + 1;
+void delete_at(struct data_array* file, int* pointer) {
+    int i;
+    struct data_array* c;
+    if (*pointer > file->lenght) {
+        return;
     }
-    if (pointer / COLS < first_line) {
-        first_line = pointer / COLS;
+    for (i = *pointer; i < file->lenght; i++) {
+        file->data[i] = file->data[i + 1];
     }
+    file->lenght--;
+    move_pointer_left(file, pointer);
 }
