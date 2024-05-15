@@ -6,17 +6,15 @@
 #include <conio.h>
 
 int main() {
-    char filename[BUFFERSIZE]; // nome do arquivo
+    char filename[BUFFERSIZE] = "file.txt"; // nome do arquivo
 
     struct data_array file = {};
     int pointer = 0;
     int first_line = 0;
     int input = 0;
 
-    // set_data(file, file_size);
     show_editor();
     show_data(&file, pointer, &first_line);
-    // TODO: Logica de navegação e direção
     while (input != 'Q' && input != 'q') {
         input = get_input();
         switch (input) {
@@ -51,6 +49,25 @@ int main() {
             case 'g':
             case 'G':
                 save_file_as(&file, filename);
+                break;
+            case 'e':
+            case 'E':
+                input = get_input();
+                while (input != 27 && pointer < file.lenght) {
+                    file.data[pointer] = input;
+                    show_data(&file, pointer, &first_line);
+                    move_pointer_right(&file, &pointer);
+                    input = get_input();
+                }
+                break;
+            case 'i':
+            case 'I':
+                input = get_input();
+                while (input != 27) {
+                    insert_at(&file, &pointer, input);
+                    show_data(&file, pointer, &first_line);
+                    input = get_input();
+                }
                 break;
         }
         show_data(&file, pointer, &first_line);

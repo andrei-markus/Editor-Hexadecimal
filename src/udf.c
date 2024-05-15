@@ -130,7 +130,7 @@ void window(int x1, int y1, int x2, int y2, char text[]) {
 
 // retorna a quantidade de caracteres escritos no out
 void get_data_slice(const struct data_array* data, int offset, int size,
-                    char* out) {
+                    unsigned char* out) {
     int i = 0;
 
     memset(out, 0, size);
@@ -153,7 +153,7 @@ void show_data(const struct data_array* file, int pointer, int* first_line) {
     int l;
     int c;
     int b;
-    char data[ROWS * COLS];
+    unsigned char data[ROWS * COLS];
 
     if ((pointer / COLS) >= (*first_line + ROWS)) {
         *first_line = pointer / COLS - ROWS + 1;
@@ -201,7 +201,7 @@ void show_editor() {
     y2 = ROWS + 5;
 
     window(x1, y1, x2, y2, "EDITOR HEXADECIMAL");
-    show_menu("Q - Sair\tWASD - Move\tX - Apagar", 1);
+    show_menu("Q - Sair\tWASD - Move\tE - Editar\tI - Inserir\tX - Apagar", 1);
     show_menu("F - Salvar\tG - Salvar como", 2);
 }
 
@@ -274,6 +274,16 @@ void move_pointer_down(const struct data_array* file, int* pointer) {
     }
 }
 
+void grow_file(struct data_array* file) {
+    unsigned char* c = malloc(file->capacity * 1.5 + 1);
+    if (file->data) {
+        memcpy(c, file->data, file->capacity);
+        free(file->data);
+    }
+    file->data = c;
+    file->capacity = file->capacity * 1.5 + 1;
+}
+
 void delete_at(struct data_array* file, int* pointer) {
     int i;
     struct data_array* c;
@@ -285,6 +295,21 @@ void delete_at(struct data_array* file, int* pointer) {
     }
     file->lenght--;
     move_pointer_left(file, pointer);
+}
+
+void insert_at(struct data_array* file, int* pointer, unsigned char c) {
+    int i;
+    while (*pointer >= file->capacity) {
+        grow_file(file);
+    }
+    i = file->capacity - 1;
+    while (i > *pointer) {
+        file->data[i] = file->data[i - 1];
+        i--;
+    }
+    file->data[*pointer] = c;
+    file->lenght++;
+    move_pointer_right(file, pointer);
 }
 
 void open_file(struct data_array* file, char* filename) {

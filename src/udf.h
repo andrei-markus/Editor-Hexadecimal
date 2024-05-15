@@ -25,7 +25,7 @@ enum colors {
 };
 
 struct data_array {
-    char* data;
+    unsigned char* data;
     int lenght;
     int capacity;
 };
@@ -54,7 +54,9 @@ void move_pointer_left(const struct data_array* file, int* pointer);
 void move_pointer_right(const struct data_array* file, int* pointer);
 void move_pointer_down(const struct data_array* file, int* pointer);
 
+void grow_file(struct data_array* file);
 void delete_at(struct data_array* file, int* pointer);
+void insert_at(struct data_array* file, int* pointer, unsigned char c);
 void open_file(struct data_array* file, char* filename);
 void save_file(const struct data_array* file, const char* filename);
 void save_file_as(const struct data_array* file, char* filename);
