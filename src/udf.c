@@ -121,24 +121,11 @@ void window(int x1, int y1, int x2, int y2, char text[]) {
     color(color_white, color_black);
 }
 
-// void set_data(char* data, int size) {
-//     root = calloc(1, sizeof(struct data_array));
-//     root->data = data;
-//     root->lenght = size;
-//     max_pointer = size;
-// }
-
-// retorna a quantidade de caracteres escritos no out
 void get_data_slice(const struct data_array* data, int offset, int size,
                     unsigned char* out) {
     int i = 0;
 
     memset(out, 0, size);
-
-    // while (i < size && (i + offset) < data->lenght) {
-
-    //     out[i] = data->data[offset + i];
-    // }
 
     memset(out, 0, size);
     if (data->lenght - offset >= size) {
@@ -209,43 +196,6 @@ void delay(int ms) {
 #if defined(WIN32)
     Sleep(ms);
 #endif
-}
-
-int achoice(int x, int y, int x1, int y1, int numopcoes, char opcoes[][20]) {
-    int i;
-    int opcao = 0;
-    int tecla = 0;
-
-    while (tecla != 13) {
-        textcolor(3);
-        textbackground(4);
-        for (i = 0; i < numopcoes; i++) {
-            gotoxy(x, y + i);
-            spaces(x1 - x);
-            gotoxy(x, y + i);
-            printf("%s", opcoes[i]);
-        }
-        textcolor(4);
-        textbackground(5);
-        gotoxy(x, y + opcao);
-        spaces(x1 - x);
-        gotoxy(x, y + opcao);
-        printf("%s", opcoes[opcao]);
-
-        tecla = getch();
-        if (tecla == 'A' || tecla == 'a') {
-            if (opcao > 0) {
-                opcao--;
-            }
-        }
-        if (tecla == 'Z' || tecla == 'z') {
-            if (opcao < numopcoes - 1) {
-                opcao++;
-            }
-        }
-    }
-
-    return opcao;
 }
 
 int get_input() { return getch(); }
