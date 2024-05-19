@@ -12,6 +12,8 @@ int main() {
     int pointer = 0;
     int first_line = 0;
     int input = 0;
+    char search_str[BUFFERSIZE];
+    int search_result;
 
     show_editor();
     show_data(&file, pointer, &first_line);
@@ -68,6 +70,22 @@ int main() {
                     show_data(&file, pointer, &first_line);
                     input = get_input();
                 }
+                break;
+            case 'b':
+            case 'B':
+                clear();
+                printf("Digite o texto para pesquisa: ");
+                fgets(search_str, BUFFERSIZE, stdin);
+                search_str[strcspn(search_str, "\r\n")] = 0; // Remove newline character
+                search_result = search_data(&file, search_str);
+                if (search_result >= 0) {
+                    pointer = search_result;
+                    printf("Encontrado na posicao: %d\n", search_result);
+                } else {
+                    printf("Nao encontrado\n");
+                }
+                delay(2000);
+                show_editor();
                 break;
         }
         show_data(&file, pointer, &first_line);

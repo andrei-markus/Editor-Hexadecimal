@@ -189,8 +189,8 @@ void show_editor() {
     y2 = ROWS + 5;
 
     window(x1, y1, x2, y2, "EDITOR HEXADECIMAL");
-    show_menu("Q - Fechar\tWASD - Move\tE - Editar\tI - Inserir\tX - Apagar", 1);
-    show_menu("F - Salvar\tG - Salvar como\tEsc - Sair", 2);
+    show_menu("Q - Fechar\tWASD - Mover\tE - Editar\tI - Inserir\tX - Apagar", 1);
+    show_menu("F - Salvar\tG - Salvar como\tO - Abrir\tB - Buscar\tEsc - Sair", 2);
 }
 
 void delay(int ms) {
@@ -308,4 +308,14 @@ void save_file_as(const struct data_array* file, char* filename) {
     filename[strcspn(filename, "\r\n")] = 0;
     save_file(file, filename);
     show_editor();
+}
+
+int search_data(const struct data_array* file, const char* search_str) {
+    int str_len = strlen(search_str);
+    for (int i = 0; i <= file->lenght - str_len; i++) {
+        if (memcmp(&file->data[i], search_str, str_len) == 0) {
+            return i;
+        }
+    }
+    return -1;
 }

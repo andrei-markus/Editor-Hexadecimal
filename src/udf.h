@@ -2,7 +2,7 @@
 #define UDF_HEADER
 
 #define COLS 16
-#define ROWS 25
+#define ROWS 24
 #define BUFFERSIZE 250
 
 enum colors {
