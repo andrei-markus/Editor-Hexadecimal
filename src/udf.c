@@ -1,13 +1,14 @@
 #include "udf.h"
-#include <corecrt_memory.h>
-#include <stdlib.h>
-#include <string.h>
+
 #if defined(WIN32)
 #include <Windows.h>
 #endif
-#include <stdio.h>
+
 #include <conio.h>
 #include <ctype.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #define DATA_TOP_OFFSET 2
 #define DATA_LEFT_OFFSET 11

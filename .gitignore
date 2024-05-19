@@ -127,6 +127,9 @@ obj/
 cmake-build-*/
 build/
 
+*.depend
+*.layout
+
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
 
