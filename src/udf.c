@@ -189,8 +189,8 @@ void show_editor() {
     y2 = ROWS + 5;
 
     window(x1, y1, x2, y2, "EDITOR HEXADECIMAL");
-    show_menu("Q - Sair\tWASD - Move\tE - Editar\tI - Inserir\tX - Apagar", 1);
-    show_menu("F - Salvar\tG - Salvar como", 2);
+    show_menu("Q - Fechar\tWASD - Move\tE - Editar\tI - Inserir\tX - Apagar", 1);
+    show_menu("F - Salvar\tG - Salvar como\tEsc - Sair", 2);
 }
 
 void delay(int ms) {
