@@ -161,20 +161,27 @@ void show_data(const struct data_array* file, int pointer, int* first_line) {
         gotoxy(DATA_LEFT_OFFSET, l + DATA_TOP_OFFSET);
         for (c = 0; c < COLS; c++) {
             if ((l * COLS + c) == pointer) {
-                color(color_white, color_dark_red); // Highlight selection
+                color(color_white, color_dark_red); // Destaque de seleção
             } else {
-                color(color_light_gray, color_black); // Normal text
+                color(color_light_gray, color_black);
             }
             printf("%02X ", data[l * COLS + c]);
             color(color_light_gray, color_black);
         }
         printf("   ");
+
         for (c = 0; c < COLS; c++) {
+            if ((l * COLS + c) == pointer) {
+                color(color_white, color_dark_red); // Highlight selection
+            } else {
+                color(color_light_gray, color_black); // Normal text
+            }
             if (data[l * COLS + c] < 32 || data[l * COLS + c] > 126) {
                 printf(".");
             } else {
                 printf("%c", data[l * COLS + c]);
             }
+                color(color_light_gray, color_black);
         }
     }
     gotoxy(DATA_LEFT_OFFSET + (pointer % COLS) * 3,
@@ -279,7 +286,9 @@ void open_file(struct data_array* file, char* filename) {
 
     if ((handle = fopen(filename, "rb")) == NULL) { // conseguiu abrir ?
         printf("Não foi possivel abrir o arquivo %s", filename);
-        delay(1000);
+        delay(1500);
+        show_editor();
+        show_data(file, 0, &first_line);
         return;
     }
 
@@ -325,3 +334,5 @@ int search_data(const struct data_array* file, const char* search_str) {
     }
     return -1;
 }
+
+
