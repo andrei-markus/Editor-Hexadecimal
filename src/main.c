@@ -76,7 +76,7 @@ int main() {
                 clear();
                 printf("Digite o texto para pesquisa: ");
                 fgets(search_str, BUFFERSIZE, stdin);
-                search_str[strcspn(search_str, "\r\n")] = 0; // Remove newline character
+                search_str[strcspn(search_str, "\r\n")] = 0;
                 search_result = search_data(&file, search_str);
                 if (search_result >= 0) {
                     pointer = search_result;

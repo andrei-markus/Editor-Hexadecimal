@@ -160,7 +160,7 @@ void show_data(const struct data_array* file, int pointer, int* first_line) {
     for (l = 0; l < ROWS; l++) {
         gotoxy(DATA_LEFT_OFFSET, l + DATA_TOP_OFFSET);
         for (c = 0; c < COLS; c++) {
-            if ((l * COLS + c) == pointer) {
+            if ((*first_line * COLS + l * COLS + c) == pointer) {
                 color(color_white, color_dark_red); // Destaque de seleção
             } else {
                 color(color_light_gray, color_black);
@@ -171,10 +171,10 @@ void show_data(const struct data_array* file, int pointer, int* first_line) {
         printf("   ");
 
         for (c = 0; c < COLS; c++) {
-            if ((l * COLS + c) == pointer) {
-                color(color_white, color_dark_red); // Highlight selection
+            if ((*first_line * COLS + l * COLS + c) == pointer) {
+                color(color_white, color_dark_red); // Destaque de seleção
             } else {
-                color(color_light_gray, color_black); // Normal text
+                color(color_light_gray, color_black);
             }
             if (data[l * COLS + c] < 32 || data[l * COLS + c] > 126) {
                 printf(".");
@@ -334,5 +334,7 @@ int search_data(const struct data_array* file, const char* search_str) {
     }
     return -1;
 }
+
+
 
 
