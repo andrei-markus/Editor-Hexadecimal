@@ -276,6 +276,36 @@ void insert_at(struct data_array* file, int* pointer, unsigned char c) {
     move_pointer_right(file, pointer);
 }
 
+void edit_hex_at(struct data_array* file, int* pointer) {
+    unsigned char new_value = 0;
+    int input;
+    int digit_count = 0;
+    int hex_digit;
+
+    while (digit_count < 2) {
+        input = getch();
+        hex_digit = toupper(input);
+
+        if (isxdigit(hex_digit)) {
+            if (isdigit(hex_digit)) {
+                hex_digit -= '0';
+            } else {
+                hex_digit = hex_digit - 'A' + 10;
+            }
+
+            if (digit_count == 0) {
+                new_value = hex_digit << 4;
+            } else {
+                new_value |= hex_digit;
+                file->data[*pointer] = new_value;
+            }
+
+            printf("%c", input); // Exibe o caractere digitado
+            digit_count++;
+        }
+    }
+}
+
 void open_file(struct data_array* file, char* filename) {
     FILE* handle; // handle do arquivo
 
@@ -325,14 +355,18 @@ void save_file_as(const struct data_array* file, char* filename) {
     show_editor();
 }
 
-int search_data(const struct data_array* file, const char* search_str) {
+int search_data(const struct data_array* file, const char* search_str, int start_pos) {
     int str_len = strlen(search_str);
-    for (int i = 0; i <= file->lenght - str_len; i++) {
+    int i = start_pos + 1;  // Começa a busca a partir da próxima posição após a posição inicial
+
+    while (i <= file->lenght - str_len) {
         if (memcmp(&file->data[i], search_str, str_len) == 0) {
-            return i;
+            return i;  // Retorna a posição
         }
+        i++;
     }
-    return -1;
+
+    return -1;  // Retorna -1 se não encontrar
 }
 
 

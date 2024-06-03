@@ -55,9 +55,10 @@ void move_pointer_down(const struct data_array* file, int* pointer);
 void grow_file(struct data_array* file);
 void delete_at(struct data_array* file, int* pointer);
 void insert_at(struct data_array* file, int* pointer, unsigned char c);
+void edit_hex_at(struct data_array* file, int* pointer);
 void open_file(struct data_array* file, char* filename);
 void save_file(const struct data_array* file, const char* filename);
 void save_file_as(const struct data_array* file, char* filename);
-int search_data(const struct data_array* file, const char* search_str);
+int search_data(const struct data_array* file, const char* search_str, int start_pos);
 
 #endif

@@ -77,7 +77,7 @@ int main() {
                 printf("Digite o texto para pesquisa: ");
                 fgets(search_str, BUFFERSIZE, stdin);
                 search_str[strcspn(search_str, "\r\n")] = 0;
-                search_result = search_data(&file, search_str);
+                search_result = search_data(&file, search_str,pointer);
                 if (search_result >= 0) {
                     pointer = search_result;
                     printf("Encontrado na posicao: %d\n", search_result);
@@ -86,6 +86,10 @@ int main() {
                 }
                 delay(2000);
                 show_editor();
+                break;
+                case 'h':
+                case 'H':
+                edit_hex_at(&file, &pointer);
                 break;
         }
         show_data(&file, pointer, &first_line);
