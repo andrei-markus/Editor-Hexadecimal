@@ -110,16 +110,16 @@ void textcenter(int x1, int x2, int y1, char text[]) {
 void window(int x1, int y1, int x2, int y2, char text[]) {
     int i;
 
-    color(color_white, color_dark_blue);
+    color(color_white, color_dark_red);
 
     gotoxy(x1, y1);
     spaces(x2 - x1);
     textcenter(x1, x2, y1, text);
 
-    color(color_white, color_black);
+    color(color_black, color_cyan);
     drawbox(x1, y1 + 1, x2, y2);
     fillbox(x1, y1 + 1, x2, y2);
-    color(color_white, color_black);
+    color(color_black, color_cyan);
 }
 
 void get_data_slice(const struct data_array* data, int offset, int size,
@@ -161,27 +161,27 @@ void show_data(const struct data_array* file, int pointer, int* first_line) {
         gotoxy(DATA_LEFT_OFFSET, l + DATA_TOP_OFFSET);
         for (c = 0; c < COLS; c++) {
             if ((*first_line * COLS + l * COLS + c) == pointer) {
-                color(color_white, color_dark_red); // Destaque de seleção
+                color(color_white, color_dark_blue); // Destaque de seleção
             } else {
-                color(color_light_gray, color_black);
+                color(color_black, color_cyan);
             }
             printf("%02X ", data[l * COLS + c]);
-            color(color_light_gray, color_black);
+            color(color_black, color_cyan);
         }
         printf("   ");
 
         for (c = 0; c < COLS; c++) {
             if ((*first_line * COLS + l * COLS + c) == pointer) {
-                color(color_white, color_dark_red); // Destaque de seleção
+                color(color_white, color_dark_blue); // Destaque de seleção
             } else {
-                color(color_light_gray, color_black);
+                color(color_black, color_cyan);
             }
             if (data[l * COLS + c] < 32 || data[l * COLS + c] > 126) {
                 printf(".");
             } else {
                 printf("%c", data[l * COLS + c]);
             }
-                color(color_light_gray, color_black);
+                color(color_black, color_cyan);
         }
     }
     gotoxy(DATA_LEFT_OFFSET + (pointer % COLS) * 3,
