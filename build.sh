@@ -1,0 +1,1 @@
+gcc -O3 -DNDEBUG -std=gnu99 -o build/editor src/main.c src/udf.c

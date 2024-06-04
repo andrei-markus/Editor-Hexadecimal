@@ -11,3 +11,9 @@ O que precisa ser desenvolvido e nota merecida:
 - [X] Acrescentar busca e outros recursos (me surpreendam): 10.0
 
 Mínimo: Mostrar, editar e salvar.
+
+# Compilar
+```sh
+chmod +x build.sh
+./build.sh
+```

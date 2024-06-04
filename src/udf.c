@@ -9,9 +9,13 @@
 
 #if defined(_WIN32)
 #include <Windows.h>
+#include <conio.h>
+#else
+#include <time.h>
+#include "termios.h"
+#include "unistd.h"
 #endif
 
-#include <conio.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
@@ -24,17 +28,32 @@
 int max_pointer = 0;
 int first_line = 0;
 
-// struct data_array* root;
-
 void clear() {
-#if defined(__linux__) || defined(__unix__) || defined(__APPLE__)
+#if defined(_WIN32)
+    color(color_white, color_black);
+    system("cls");
+#else
+    printf("\x1b[0;0m");
     system("clear");
 #endif
-
-#if defined(_WIN32)
-    system("cls");
-#endif
+    gotoxy(0, 0);
 }
+
+#if !defined(_WIN32)
+int getch(void) {
+    struct termios oldt, newt;
+    int ch;
+
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+    ch = getchar();
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+
+    return ch;
+}
+#endif
 
 void drawbox(int x1, int y1, int x2, int y2) {
     int i;
@@ -68,17 +87,25 @@ void fillbox(int x1, int y1, int x2, int y2) {
 }
 
 void textcolor(int color) {
+#if defined(_WIN32)
     HANDLE hl = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_SCREEN_BUFFER_INFO bufferInfo;
     BOOL b = GetConsoleScreenBufferInfo(hl, &bufferInfo);
     bufferInfo.wAttributes &= 0x00F0;
     SetConsoleTextAttribute(hl, bufferInfo.wAttributes |= color);
+#else
+    printf("\x1b[%im", color);
+#endif
 }
 
 void textbackground(int color) {
+#if defined(_WIN32)
     HANDLE console_color;
     console_color = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(console_color, color * 16);
+#else
+    printf("\x1b[%im", color + 10);
+#endif
 }
 
 void color(int textColor, int backgroundColor) {
@@ -94,10 +121,14 @@ void spaces(int s) {
 }
 
 void gotoxy(int x, int y) {
+#if defined(_WIN32)
     COORD coord;
     coord.X = (short)x;
     coord.Y = (short)y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+#else
+    printf("\033[%d;%dH", y + 1, x + 1);
+#endif
 }
 
 int stringlen(char text[]) {
@@ -112,7 +143,7 @@ void textcenter(int x1, int x2, int y1, char text[]) {
     int midtext = stringlen(text) / 2;
     int midwindow = x1 + (x2 - x1) / 2 - midtext;
     gotoxy(midwindow, y1);
-    printf(text);
+    printf("%s", text);
 }
 
 void window(int x1, int y1, int x2, int y2, char text[]) {
@@ -244,6 +275,11 @@ void show_editor() {
 void delay(int ms) {
 #if defined(_WIN32)
     Sleep(ms);
+#else
+    struct timespec ts;
+    ts.tv_sec = ms / 1000;
+    ts.tv_nsec = (ms % 1000) * 1000000;
+    nanosleep(&ts, NULL);
 #endif
 }
 
