@@ -1,3 +1,10 @@
+/** ===============================================================================
+ Author______: Andrei Markus, Erni Feix Junior, Lucas Antonio Donida Rodrigues
+ Date________: 03/20/2024
+ Utility_____: Editor Hexadecimal
+ Compiler cmd: gcc udf.c -o udf
+ ============================================================================== **/
+
 #include "udf.h"
 
 #if defined(_WIN32)
@@ -383,12 +390,9 @@ void save_file_as(const struct data_array* file, char* filename) {
     show_editor();
 }
 
-int search_data(const struct data_array* file, const char* search_str,
-                int start_pos) {
+int search_data(const struct data_array* file, const char* search_str, int start_pos) {
     int str_len = strlen(search_str);
-    int i =
-        start_pos +
-        1; // Começa a busca a partir da próxima posição após a posição inicial
+    int i = start_pos + 1; // Começa a busca a partir da próxima posição após a posição inicial
 
     while (i <= file->lenght - str_len) {
         if (memcmp(&file->data[i], search_str, str_len) == 0) {
