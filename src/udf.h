@@ -6,6 +6,8 @@
 #define BUFFERSIZE 250
 
 enum colors {
+#if defined(_WIN32)
+
     color_black = 0,
     color_dark_blue = 1,
     color_dark_green = 2,
@@ -22,6 +24,26 @@ enum colors {
     color_pink = 13,
     color_yellow = 14,
     color_white = 15
+#else
+    color_black = 30,
+    color_dark_red = 31,
+    color_dark_green = 32,
+    color_orange = 33,
+    color_dark_blue = 34,
+    color_magenta = 35,
+    color_cyan = 36,
+    color_light_gray = 37,
+
+    color_gray = 90,
+    color_red = 91,
+    color_green = 92,
+    color_yellow = 93,
+    color_blue = 94,
+    color_pink = 95,
+    color_light_blue = 96,
+    color_white = 97
+
+#endif
 };
 
 struct data_array {
