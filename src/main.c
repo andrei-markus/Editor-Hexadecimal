@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <conio.h>
-
 int main() {
     char filename[BUFFERSIZE] = "file.txt"; // nome do arquivo
 
@@ -77,7 +75,7 @@ int main() {
                 printf("Digite o texto para pesquisa: ");
                 fgets(search_str, BUFFERSIZE, stdin);
                 search_str[strcspn(search_str, "\r\n")] = 0;
-                search_result = search_data(&file, search_str,pointer);
+                search_result = search_data(&file, search_str, pointer);
                 if (search_result >= 0) {
                     pointer = search_result;
                     printf("Encontrado na posicao: %d\n", search_result);
@@ -87,8 +85,8 @@ int main() {
                 delay(2000);
                 show_editor();
                 break;
-                case 'h':
-                case 'H':
+            case 'h':
+            case 'H':
                 edit_hex_at(&file, &pointer);
                 break;
         }

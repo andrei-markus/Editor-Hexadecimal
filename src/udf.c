@@ -12,6 +12,7 @@
 
 #define DATA_TOP_OFFSET 2
 #define DATA_LEFT_OFFSET 11
+#define MAX_MENU 4
 
 int max_pointer = 0;
 int first_line = 0;
@@ -181,9 +182,33 @@ void show_data(const struct data_array* file, int pointer, int* first_line) {
             } else {
                 printf("%c", data[l * COLS + c]);
             }
-                color(color_black, color_cyan);
+            color(color_black, color_cyan);
         }
     }
+#define BUFF_SIZE COLS * 4 + DATA_LEFT_OFFSET
+    char buff[BUFF_SIZE];
+    memset(buff, ' ', BUFF_SIZE);
+    buff[BUFF_SIZE - 1] = '\0';
+    show_menu(buff, 0);
+    if (pointer < file->lenght) {
+        if (pointer < file->lenght - 3) {
+            sprintf(buff, "bin: 00000000\t8b int: %i\t32b int: %i\tfloat: %e",
+                    *((char*)(file->data + pointer)),
+                    *((int*)(file->data + pointer)),
+                    *((float*)(file->data + pointer)));
+        } else {
+            sprintf(buff, "bin: 00000000\t8b int: %i",
+                    *((char*)(file->data + pointer)));
+        }
+        for (int i = 0; i < 8; ++i) {
+            if (file->data[pointer] & (1 << i)) {
+                buff[4 + 8 - i] = '1';
+            }
+        }
+
+        show_menu(buff, 0);
+    }
+
     gotoxy(DATA_LEFT_OFFSET + (pointer % COLS) * 3,
            DATA_TOP_OFFSET + (pointer / COLS) - *first_line);
 }
@@ -199,11 +224,14 @@ void show_editor() {
     x1 = 0;
     x2 = COLS * 4 + 16;
     y1 = 0;
-    y2 = ROWS + 5;
+    y2 = ROWS + 2 + MAX_MENU;
 
     window(x1, y1, x2, y2, "EDITOR HEXADECIMAL");
-    show_menu("Q - Fechar\tWASD - Mover\tE - Editar\tI - Inserir\tX - Apagar", 1);
-    show_menu("F - Salvar\tG - Salvar como\tO - Abrir\tB - Buscar\tEsc - Sair", 2);
+    show_menu("Q - Fechar\tWASD - Mover\tE - Editar\tI - Inserir\tX - Apagar",
+              1);
+    show_menu("F - Salvar\tG - Salvar como\tO - Abrir\tB - Buscar\tEsc - Sair",
+              2);
+    show_menu("H - Editar valor hexadecimal", 3);
 }
 
 void delay(int ms) {
@@ -355,20 +383,19 @@ void save_file_as(const struct data_array* file, char* filename) {
     show_editor();
 }
 
-int search_data(const struct data_array* file, const char* search_str, int start_pos) {
+int search_data(const struct data_array* file, const char* search_str,
+                int start_pos) {
     int str_len = strlen(search_str);
-    int i = start_pos + 1;  // Começa a busca a partir da próxima posição após a posição inicial
+    int i =
+        start_pos +
+        1; // Começa a busca a partir da próxima posição após a posição inicial
 
     while (i <= file->lenght - str_len) {
         if (memcmp(&file->data[i], search_str, str_len) == 0) {
-            return i;  // Retorna a posição
+            return i; // Retorna a posição
         }
         i++;
     }
 
-    return -1;  // Retorna -1 se não encontrar
+    return -1; // Retorna -1 se não encontrar
 }
-
-
-
-
