@@ -12,7 +12,18 @@ O que precisa ser desenvolvido e nota merecida:
 
 Mínimo: Mostrar, editar e salvar.
 
-# Compilar
+# Compilar com cmake
+```sh
+cmake -S . -B build
+cmake --build build
+```
+
+# Compilar com gcc
+## Windows
+```sh
+./build.bat
+```
+## Linux
 ```sh
 chmod +x build.sh
 ./build.sh
